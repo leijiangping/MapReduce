@@ -1,19 +1,24 @@
 package info.xiaohei.www;
 
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.*;
-import org.apache.hadoop.io.IOUtils;
-
 import java.io.IOException;
 import java.net.URI;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.hdfs.DistributedFileSystem;
+import org.apache.hadoop.hdfs.protocol.DatanodeInfo;
+import org.apache.hadoop.io.IOUtils;
 
 /**
  * Created by xiaohei on 16/3/9.
  * HDFS操作类
  */
 public class HdfsUtil {
-
-    private static final String HDFS = "hdfs://localhost:9000/";
+    private static final String HDFS = "hdfs://192.168.0.54:9000/";
     private static final Configuration conf = new Configuration();
 
     /**
@@ -142,4 +147,27 @@ public class HdfsUtil {
             fs.close();
         }
     }
+    
+    //获取HDFS集群上所有节点名称信息  
+    public static void getDateNodeHost() throws IOException, InterruptedException{  
+          
+  
+               FileSystem fs = FileSystem.get(URI.create(HDFS), conf,"root");
+               DistributedFileSystem hdfs = (DistributedFileSystem)fs;  
+               DatanodeInfo[] dataNodeStats = hdfs.getDataNodeStats();  
+               for(int i=0;i<dataNodeStats.length;i++){  
+                  System.out.println("DataNode_"+i+"_Name:"+dataNodeStats[i].getHostName()+", IP address ："+dataNodeStats[i].getInfoAddr());  
+               }  
+    }  
+    
+    public static void main(String[] args) throws Exception {
+/*    	System.setProperty("hadoop.home.dir", "D:\\Server\\hadoop-2.7.2");
+    	System.setProperty("HADOOP_USER_NAME", "root");*/
+    	HdfsUtil.getDateNodeHost();
+    	HdfsUtil.ls("input");
+    	HdfsUtil.createFile("input/wordcount/file01","Hello World Bye World");
+    	HdfsUtil.createFile("input/wordcount/file02","Hello Hadoop Goodbye Hadoop");
+    	//HdfsUtil.download("input/wordcount/file01", "D:\\hdfs_local\\file01.txt");
+    }
+    
 }

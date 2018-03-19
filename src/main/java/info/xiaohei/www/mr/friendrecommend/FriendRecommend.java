@@ -81,6 +81,8 @@ public class FriendRecommend {
     }
 
     public static void main(String[] args) throws InterruptedException, IOException, ClassNotFoundException {
+    	System.setProperty("hadoop.home.dir", "D:\\Server\\hadoop-2.7.2");
+    	System.setProperty("HADOOP_USER_NAME", "root");
         FriendRecommend.run();
     }
 }
