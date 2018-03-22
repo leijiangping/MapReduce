@@ -8,7 +8,7 @@ import java.io.IOException;
 
 /**
  * Created by xiaohei on 16/2/24.
- * 汇总统计各个用户对各个iterm的喜好度
+ * 汇总统计各个用户对各个item的喜好度
  */
 public class RecommendReducer extends Reducer<Text, DoubleWritable, Text, Text> {
     Text userId = new Text();

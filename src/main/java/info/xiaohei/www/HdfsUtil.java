@@ -13,7 +13,7 @@ import java.net.URI;
  */
 public class HdfsUtil {
 
-    private static final String HDFS = "hdfs://localhost:9000/";
+    private static final String HDFS = "hdfs://192.168.0.130:9000/";
     private static final Configuration conf = new Configuration();
 
     /**
@@ -141,5 +141,9 @@ public class HdfsUtil {
             IOUtils.closeStream(fsdis);
             fs.close();
         }
+    }
+    
+    public static void main(String[] args) throws IOException {
+    	HdfsUtil.ls("input");
     }
 }
