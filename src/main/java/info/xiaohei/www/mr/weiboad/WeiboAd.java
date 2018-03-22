@@ -11,6 +11,7 @@ import java.net.URISyntaxException;
  */
 public class WeiboAd {
     public static void main(String[] args) throws InterruptedException, IOException, ClassNotFoundException, URISyntaxException {
+        CalcTFAndN.run();
         CalcDF.run();
         CalcTotal.run();
     }
