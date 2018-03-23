@@ -1,11 +1,18 @@
 package info.xiaohei.www;
 
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.*;
-import org.apache.hadoop.io.IOUtils;
-
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URI;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IOUtils;
 
 /**
  * Created by xiaohei on 16/3/9.
@@ -143,7 +150,71 @@ public class HdfsUtil {
         }
     }
     
-    public static void main(String[] args) throws IOException {
+    /**
+     * 本地文件上传至 HDFS
+     *
+     * @param srcFile 源文件 路径
+     * @param destPath hdfs路径
+     */
+    public static void uploadFileToHDFS(String srcFile,String destPath)throws Exception{
+
+        FileInputStream fis=new FileInputStream(new File(srcFile));//读取本地文件
+        Configuration config=new Configuration();
+        FileSystem fs=FileSystem.get(URI.create(HDFS+destPath), config);
+        OutputStream os=fs.create(new Path(destPath));
+        //copy
+        IOUtils.copyBytes(fis, os, 4096, true);
+        System.out.println("拷贝完成...");
+        fs.close();
+    }
+    
+    public static boolean copyDirectory(String src , String dst) throws Exception{  
+        
+        FileSystem fs = FileSystem.get(conf);  
+        if(!fs.exists(new Path(dst))){  
+            fs.mkdirs(new Path(dst));  
+        }  
+        System.out.println("copyDirectory:"+dst);  
+        FileStatus status = fs.getFileStatus(new Path(dst));  
+        File file = new File(src);  
+          
+        if(status.isFile()){  
+            System.exit(2);  
+            System.out.println("You put in the "+dst + "is file !");  
+        }else{  
+            dst = cutDir(dst);  
+        }  
+        File[] files = file.listFiles();  
+        for(int i = 0 ;i< files.length; i ++){  
+            File f = files[i];  
+            if(f.isDirectory()){  
+                copyDirectory(f.getPath(),dst);  
+            }else{  
+                copyFile(f.getPath(),dst+files[i].getName());  
+            }  
+              
+        }  
+        return true;  
+    }  
+    public static String cutDir(String str){  
+        String[] strs = str.split(File.pathSeparator);  
+        String result = "";  
+        if("hdfs"==strs[0]){  
+            result += "hdfs://";  
+            for(int i = 1 ; i < strs.length  ; i++){  
+                result += strs[i] + File.separator;  
+            }  
+        }else{  
+            for(int i = 0 ; i < strs.length  ; i++){  
+                result += strs[i] + File.separator;  
+            }  
+        }  
+          
+        return result;  
+    } 
+    
+    public static void main(String[] args) throws Exception {
     	HdfsUtil.ls("input");
+    	HdfsUtil.copyDirectory("C:\\Users\\Administrator\\Desktop\\data-cankao", "input");
     }
 }
