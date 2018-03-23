@@ -127,7 +127,7 @@ public class CalcPeopleRank {
         BaseDriver.initJob(new JobInitModel[]{job});
 
 
-        HdfsUtil.rmr(inPath2);
+        HdfsUtil.deleteFile(inPath2);
         HdfsUtil.rename(outPath + "/part-r-00000", inPath2);
     }
 }
