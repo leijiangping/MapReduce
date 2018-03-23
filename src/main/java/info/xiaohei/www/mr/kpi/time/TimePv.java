@@ -15,8 +15,8 @@ import java.io.IOException;
  */
 public class TimePv {
     public static void main(String[] args) throws InterruptedException, IOException, ClassNotFoundException {
-        String[] inPath = new String[]{"hdfs://localhost:9000/data/1-kpi/*"};
-        String outPath = "hdfs://localhost:9000/out/1-kpi/time";
+        String[] inPath = new String[]{"hdfs://192.168.0.130:9000/user/root/input/log"};
+        String outPath = "hdfs://192.168.0.130:9000/user/root/output/kpi/time";
         Configuration conf = new Configuration();
         String jobName = "time-pv";
 

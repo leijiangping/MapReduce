@@ -30,7 +30,7 @@ public class HadoopUtil {
     /**
      * HDFS路径的根目录
      */
-    public static final String HDFS = "hdfs://localhost:9000";
+    public static final String HDFS = "hdfs://192.168.0.130:9000";
 
     /**
      * 计算unixtime两两之间的时间差
